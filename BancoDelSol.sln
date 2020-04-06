@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29926.136
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BancoDelSol_Consola", "BancoDelSol_Consola\BancoDelSol_Consola.csproj", "{DE40C996-00C1-4B71-BA93-3D56473E3E4A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BancoDelSol_Model", "BancoDelSol_Model\BancoDelSol_Model.csproj", "{8B2E0D0E-7F8C-470C-8B97-47B62D010DC6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DE40C996-00C1-4B71-BA93-3D56473E3E4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE40C996-00C1-4B71-BA93-3D56473E3E4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE40C996-00C1-4B71-BA93-3D56473E3E4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE40C996-00C1-4B71-BA93-3D56473E3E4A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B2E0D0E-7F8C-470C-8B97-47B62D010DC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B2E0D0E-7F8C-470C-8B97-47B62D010DC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B2E0D0E-7F8C-470C-8B97-47B62D010DC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B2E0D0E-7F8C-470C-8B97-47B62D010DC6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {44BC7444-8FD4-4501-9492-475390A57AD8}
+	EndGlobalSection
+EndGlobal

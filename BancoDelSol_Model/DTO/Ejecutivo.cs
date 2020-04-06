@@ -12,7 +12,7 @@ namespace BancoDelSol_Model.DTO
         private int cod_ejecutivo;
         private Cliente clientes;
 
-        public Ejecutivo(int cod_ejecutivo, Cliente clientes)
+        public Ejecutivo(int cod_ejecutivo, Cliente clientes)  //pide run
         {
             this.Cod_ejecutivo = cod_ejecutivo;
             this.Clientes = clientes;

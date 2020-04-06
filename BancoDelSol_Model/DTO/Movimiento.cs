@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BancoDelSol_Model.DTO
 {
-    class Movimiento
+    public class Movimiento
     {
         private int num_movimiento;
         private Cuenta cuenta_asoc;

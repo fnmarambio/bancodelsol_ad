@@ -9,12 +9,12 @@ namespace BancoDelSol_Model.DTO
     public class Persona
     {
         //Atributos 
-        private string run; //*
-        private string nombre;
-        private string paterno;
-        private string materno;
-        private int telefono;
-        private String direccion;
+        protected string run; 
+        protected string nombre;
+        protected string paterno;
+        protected string materno;
+        protected int telefono;
+        protected string direccion;
 
 
         //Constructor con parametros

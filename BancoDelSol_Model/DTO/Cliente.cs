@@ -6,14 +6,15 @@ using System.Threading.Tasks;
 
 namespace BancoDelSol_Model.DTO
 {
-    class Cliente : Persona
+    public class Cliente : Persona
     {
         //Atibutos
         private int cod_cliente;
         private Cuenta cuentas;
         private Ejecutivo ejecutivo;
 
-        public Cliente(int cod_cliente, Cuenta cuentas, Ejecutivo ejecutivo)
+        public Cliente(int cod_cliente, Cuenta cuentas, Ejecutivo ejecutivo, string run, string nombre, string paterno, string materno, int telefono, string direccion)
+            : base (run, nombre, paterno, materno, telefono, direccion) 
         {
             this.cod_cliente = cod_cliente;
             this.cuentas = cuentas;

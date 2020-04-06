@@ -11,7 +11,9 @@ namespace BancoDelSol_Consola
         static void Main(string[] args)
         {
             Console.WriteLine("BancoDelSol");
+            Console.WriteLine("nuevas funciones pronto!");
             Console.ReadKey();
+
 
         }
     }

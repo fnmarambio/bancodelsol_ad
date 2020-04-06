@@ -49,5 +49,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BancoDelSol_Model\BancoDelSol_Model.csproj">
+      <Project>{8b2e0d0e-7f8c-470c-8b97-47b62d010dc6}</Project>
+      <Name>BancoDelSol_Model</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

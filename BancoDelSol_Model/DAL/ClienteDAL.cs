@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BancoDelSol_Model.DAL
 {
-    class ClienteDAL
+    public class ClienteDAL : PersonaDAL
     {
     }
 }

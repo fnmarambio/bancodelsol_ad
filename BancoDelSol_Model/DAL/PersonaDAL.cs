@@ -10,7 +10,7 @@ namespace BancoDelSol_Model.DAL
     public class PersonaDAL
     {
         //Atributos
-        //Creamos una lista vacia para almacenar los objetos
+        //Evaluar**
         private static List<Persona> personas = new List<Persona>();
 
         //Metodos

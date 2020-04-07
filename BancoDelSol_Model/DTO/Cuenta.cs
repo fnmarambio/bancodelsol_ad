@@ -14,9 +14,9 @@ namespace BancoDelSol_Model.DTO
         private int credito;
         private int clave;
         private int saldo;
-        private Movimiento movimientos;
+        private List<Movimiento> movimientos;
 
-        public Cuenta(int num_cuenta, Cliente cuantahabiente, int credito, int clave, int saldo, Movimiento movimientos)
+        public Cuenta(int num_cuenta, Cliente cuantahabiente, int credito, int clave, int saldo, List<Movimiento> movimientos)
         {
             this.num_cuenta = num_cuenta;
             this.cuantahabiente = cuantahabiente;
@@ -31,6 +31,6 @@ namespace BancoDelSol_Model.DTO
         public int Clave { get => clave; set => clave = value; }
         public int Saldo { get => saldo; set => saldo = value; }
         internal Cliente Cuantahabiente { get => cuantahabiente; set => cuantahabiente = value; }
-        internal Movimiento Movimientos { get => movimientos; set => movimientos = value; }
+        internal List<Movimiento> Movimientos { get => movimientos; set => movimientos = value; }
     }
 }

@@ -15,7 +15,7 @@ namespace BancoDelSol_Model.DTO
 
       
 
-        public Cliente(int cod_cliente, List<Cuenta> cuentas, Ejecutivo ejecutivo, string run, string nombre, string paterno, string materno, int telefono, string direccion)
+        public Cliente(int cod_cliente, List<Cuenta> cuentas, Ejecutivo ejecutivo, string run, string nombre, string paterno, string materno, Int16 telefono, string direccion)
             : base (run, nombre, paterno, materno, telefono, direccion) 
         {
             this.cod_cliente = cod_cliente;

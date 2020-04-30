@@ -10,16 +10,20 @@ namespace BancoDelSol_Model.DTO
     public class Ejecutivo : Persona
     {
         private int cod_ejecutivo;
-        private List<Cliente> clientes;
+        private List<Cliente> clientes = new List<Cliente>();
 
-        public Ejecutivo(int cod_ejecutivo, List<Cliente> clientes, string run, string nombre, string paterno, string materno, Int16 telefono, string direccion) 
+        public Ejecutivo(string run, string nombre, string paterno, string materno, Int16 telefono, string direccion) 
             : base (run, nombre, paterno, materno, telefono, direccion)
         {
-            this.cod_ejecutivo = cod_ejecutivo;
-            this.clientes = clientes;
+            //this.cod_ejecutivo = cod_ejecutivo;
         }
 
         public int Cod_ejecutivo { get => cod_ejecutivo; set => cod_ejecutivo = value; }
-        internal List<Cliente> Clientes { get => clientes; set => clientes = value; }
+        public List<Cliente> Clientes { get => clientes; set => clientes = value; }
+
+        /*public override string ToString()
+        {
+            return "Ejecutivo " + this.nombre + " " + this.paterno + " " + this.materno;
+        }*/
     }
 }

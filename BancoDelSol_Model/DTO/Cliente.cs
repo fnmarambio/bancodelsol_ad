@@ -13,14 +13,13 @@ namespace BancoDelSol_Model.DTO
         private List<Cuenta> cuentas;
         private Ejecutivo ejecutivo;
 
-      
 
-        public Cliente(int cod_cliente, List<Cuenta> cuentas, Ejecutivo ejecutivo, string run, string nombre, string paterno, string materno, Int16 telefono, string direccion)
+        public Cliente(string run, string nombre, string paterno, string materno, Int16 telefono, string direccion)
             : base (run, nombre, paterno, materno, telefono, direccion) 
         {
-            this.cod_cliente = cod_cliente;
+            /*this.cod_cliente = cod_cliente;
             this.Cuentas = cuentas;
-            this.ejecutivo = ejecutivo;
+            this.ejecutivo = ejecutivo;*/
         }
 
         public int Cod_cliente { get => cod_cliente; set => cod_cliente = value; }

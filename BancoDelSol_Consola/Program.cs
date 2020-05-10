@@ -261,7 +261,7 @@ namespace BancoDelSol_Consola
             Console.WriteLine("---------------------------------------");
         }
 
-        //Crear Cuenta
+        //CREAR CUENTA
         public static void IngresarCuenta()
         {
             Console.WriteLine("---------------------------------------");

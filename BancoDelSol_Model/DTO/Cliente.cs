@@ -13,7 +13,6 @@ namespace BancoDelSol_Model.DTO
         private List<Cuenta> cuentas;
         private Ejecutivo ejecutivo;
 
-
         public Cliente(string run, string nombre, string paterno, string materno, Int16 telefono, string direccion)
             : base (run, nombre, paterno, materno, telefono, direccion) 
         {

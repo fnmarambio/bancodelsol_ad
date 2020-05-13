@@ -18,7 +18,7 @@ namespace BancoDelSol_Model.DTO
 
         public Cuenta(/*int num_cuenta, Cliente cuentahabiente, int clave, int saldo*/)
         {
-            //this.credito = 10000;   
+            this.credito = 10000;   
         }
 
         public int Num_cuenta { get => num_cuenta; set => num_cuenta = value; }

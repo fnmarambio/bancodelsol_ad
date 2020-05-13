@@ -21,16 +21,17 @@ namespace BancoDelSol_Consola
 
         }
 
+        //********************     MENU    *************************
+
         private static bool Menu(){
             bool continuar = true;
             Console.WriteLine(" ");
             Console.WriteLine("---------------------------------------");
             Console.WriteLine("BancoDelSol");
             Console.WriteLine("---------------------------------------");
-            Console.WriteLine("1. Menú Ejecutivo");
-           // Console.WriteLine("2. Mostrar Ejecutivo");
+            Console.WriteLine("1. Menú Administrador");
+            Console.WriteLine("2. Menú Ejecutivo");
             Console.WriteLine("3. Menú Cliente");
-           // Console.WriteLine("4. Mostrar Cliente");
             Console.WriteLine("0. Salir de Programa");
             Console.WriteLine("---------------------------------------");
             string opcion = Console.ReadLine().Trim();
@@ -38,21 +39,15 @@ namespace BancoDelSol_Consola
             switch(opcion){
 
                 case "1": 
-                    menuEjecutivo();
-                    //ingresarEjecutivo
+                    menuAdministrador();
                     break;
 
                 case "2": 
-                    mostrarEjecutivo();
+                    menuEjecutivo();
                     break;
 
                 case "3": 
                     menuCliente();
-                    //ingresarCliente();
-                    break;
-
-                case "4":
-                    mostrarCliente();
                     break;
 
                 case "0": 
@@ -67,16 +62,14 @@ namespace BancoDelSol_Consola
             return continuar;
         }
 
-        //Menu Ejecutivo
-        private static void menuEjecutivo()
-        {
+        //**********************   MENU ADMINISTRADOR  *********************************  
+
+        private static void menuAdministrador(){
+
             Console.WriteLine(" ");
             Console.WriteLine("---------------------------------------");
             Console.WriteLine("1. Crear Ejecutivo");
             Console.WriteLine("2. Mostrar Ejecutivos");
-            Console.WriteLine("3. Crear Cliente");
-            Console.WriteLine("4. Crear Cuenta");
-            Console.WriteLine("5. Depositar");
             Console.WriteLine("0. Menú Principal");
             Console.WriteLine("---------------------------------------");
             string opcion = Console.ReadLine().Trim();
@@ -92,15 +85,47 @@ namespace BancoDelSol_Consola
                     mostrarEjecutivo();
                     break;
 
-                case "3":
+                case "0":
+                    Menu();
+                    break;
+
+                default:
+                    Console.WriteLine("Debe ingresar una opción válida");
+                    menuEjecutivo();
+                    Console.ReadKey();
+                    break;
+            }
+        }
+
+        //***************************          MENU EJECUTIVO          *************************************
+
+        private static void menuEjecutivo()
+        {
+            Console.WriteLine(" ");
+            Console.WriteLine("---------------------------------------");
+            Console.WriteLine("1. Crear Cliente");
+            Console.WriteLine("2. Mostrar Cliente");
+            Console.WriteLine("3. Crear Cuenta");
+            Console.WriteLine("4. Depositar");
+            Console.WriteLine("0. Menú Principal");
+            Console.WriteLine("---------------------------------------");
+            string opcion = Console.ReadLine().Trim();
+
+            switch (opcion)
+            {
+                case "1":
                     ingresarCliente();
                     break;
 
-                case "4":
+                case "2":
+                    mostrarCliente();
+                    break;
+
+                case "3":
                     IngresarCuenta();
                     break;
 
-                case "5":
+                case "4":
                     depositar();
                     break;
 
@@ -116,6 +141,8 @@ namespace BancoDelSol_Consola
             }
 
         }
+
+        //**************************       CREAR EJECUTIVO     ***************************
 
         private static void ingresarEjecutivo(){
             Console.WriteLine("---------------------------------------");
@@ -145,6 +172,8 @@ namespace BancoDelSol_Consola
             Console.WriteLine("---------------------------------------");
         }
 
+        //**************************        MOSTRAR EJECUTIVOS        ***************************
+
         private static void mostrarEjecutivo(){
             List<Ejecutivo> ejecutivos = ejecutivoDAL.Mostrar();
             Console.WriteLine(" ");
@@ -172,13 +201,12 @@ namespace BancoDelSol_Consola
             Console.WriteLine("---------------------------------------");
         }
 
-        //menu para el cliente
+        //******************     MENU CLIENTE   ***********************
         private static void menuCliente()
         {
             Console.WriteLine(" ");
             Console.WriteLine("---------------------------------------");
-            Console.WriteLine("1. Mostrar Clientes");
-            Console.WriteLine("2. Asociar Cuenta a Cliente");
+            Console.WriteLine("1. Transferir");
             Console.WriteLine("0. Menú Principal");
             Console.WriteLine("---------------------------------------");
             string opcion = Console.ReadLine().Trim();
@@ -187,11 +215,7 @@ namespace BancoDelSol_Consola
             {
 
                 case "1":
-                    mostrarCliente();
-                    break;
-
-                case "2":
-                    //asociarCuenta();
+                    transferir();
                     break;
 
                 case "0":
@@ -206,6 +230,8 @@ namespace BancoDelSol_Consola
             }
             
         }
+
+        // ***************************           CREAR CLIENTE             ******************************
 
         public static void ingresarCliente(){
             Console.WriteLine("---------------------------------------");
@@ -255,6 +281,9 @@ namespace BancoDelSol_Consola
             clienteDAL.Ingresar(cliente);
         }
 
+
+        //**************************   MOSTRAR CLIENTES   ************************************* 
+
         public static void mostrarCliente(){
             List<Cliente> clientes = clienteDAL.Mostrar();
             Console.WriteLine(" ");
@@ -278,7 +307,8 @@ namespace BancoDelSol_Consola
             Console.WriteLine("---------------------------------------");
         }
 
-        //CREAR CUENTA
+        //*******************************            CREAR CUENTA            *****************************
+
         public static void IngresarCuenta()
         {
             Console.WriteLine("---------------------------------------");
@@ -310,7 +340,7 @@ namespace BancoDelSol_Consola
             for (int i = 0; i < clientes.Count(); i++)
             {  
                 Console.WriteLine(" ");
-                Console.WriteLine("Run: " + clientes[i].Run + ". Sr.(a)" + clientes[i].Nombre + " " + clientes[i].Paterno+ " "+clientes[i].Materno);   
+                Console.WriteLine("Run: " + clientes[i].Run + ". Sr.(a) " + clientes[i].Nombre + " " + clientes[i].Paterno+ " "+clientes[i].Materno);   
             }
 
             Console.WriteLine("Ingrese el rut del cliente a asociar a esta cuenta");
@@ -324,13 +354,15 @@ namespace BancoDelSol_Consola
                     cuenta.Num_cuenta = numCuenta;
                     cuenta.Saldo = dep;
                     cuenta.Cuentahabiente = clientes[i];
+                    cuenta.Clave = 1111;
                     clientes[i].Cuentas.Add(cuenta);
                     cuentaDAL.Ingresar(cuenta);
                 }
 			}
         }
 
-        //DEPOSITAR
+        //************************        DEPOSITAR         *******************************
+
         public static void depositar(){
 
             Console.WriteLine("---------------------------------------");
@@ -375,9 +407,116 @@ namespace BancoDelSol_Consola
             for (int i = 0; i < cuentas.Count(); i++)
 			{
                 if(cuentas[i].Num_cuenta == numCuenta){
-                    Console.WriteLine(cuentas[i].Saldo);
                     cuentas[i].Saldo = cuentas[i].Saldo + monto;
-                    Console.WriteLine(cuentas[i].Saldo);
+                }
+			}
+        }
+
+        //**********************            TRANSFERIR             *************************
+
+        public static void transferir(){
+
+            Console.WriteLine("---------------------------------------");
+            Console.WriteLine("Transferir");
+            Console.WriteLine("---------------------------------------");
+            Console.WriteLine(" ");
+            Console.WriteLine("Cuenta remitente");
+            Console.WriteLine(" ");
+            List<Cuenta> cuentas = cuentaDAL.Mostrar();
+            for (int i = 0; i < cuentas.Count(); i++)
+			{
+                Console.WriteLine("Titular: " + cuentas[i].Cuentahabiente.Nombre + " " + cuentas[i].Cuentahabiente.Paterno + " -- Nro cuenta: " + cuentas[i].Num_cuenta);
+                Console.WriteLine(" ");
+			}
+
+            bool remitenteValido = false, remitenteExiste = false;
+            int numCuentaRemitente;// cuentaRemitente = 0, cuentaDestino = 0;
+            do
+	        {
+                Console.WriteLine("---------------------------------------");
+                Console.WriteLine(" ");
+                Console.WriteLine("Ingrese el número de cuenta remitente");
+                string remitenteTxt = Console.ReadLine().Trim();
+                remitenteValido = int.TryParse(remitenteTxt, out numCuentaRemitente);
+                for (int i = 0; i < cuentas.Count(); i++)
+	            {
+                    if(cuentas[i].Num_cuenta == numCuentaRemitente){
+                        remitenteExiste = true;
+                        //int remitente = i;
+                    }
+	            }
+	        } while (!remitenteValido && !remitenteExiste);
+
+            bool montoValido = false;
+            int monto;
+            do
+	        {
+                Console.WriteLine("Ingrese el monto de la transferencia");
+                string montoTxt = Console.ReadLine().Trim();
+                montoValido = int.TryParse(montoTxt, out monto);
+                
+                /*if(monto > cuentas[remitente].Saldo){
+                    int diferencia = (monto - cuentas[cuentaRemitente].Saldo);
+                    if(diferencia > cuentas[cuentaRemitente].Credito){
+                        Console.WriteLine("El monto a transferir no puede superar su saldo y línea de crédito. Ingrese un monto menor");
+                        montoValido = false;
+                    }else{
+                        cuentas[cuentaRemitente].Credito = cuentas[cuentaRemitente].Credito - diferencia;
+                        cuentas[cuentaRemitente].Saldo = 0;
+                    }
+                }else{
+                    cuentas[cuentaRemitente].Saldo = cuentas[cuentaRemitente].Saldo - monto;
+                }*/
+	        } while (!montoValido);
+
+            Console.WriteLine(" ");
+            Console.WriteLine("---------------------------------------");
+            Console.WriteLine("Cuenta destino");
+            Console.WriteLine(" ");
+            for (int i = 0; i < cuentas.Count(); i++)
+			{
+                Console.WriteLine("Titular: " + cuentas[i].Cuentahabiente.Nombre + " " + cuentas[i].Cuentahabiente.Paterno + " -- Nro cuenta: " + cuentas[i].Num_cuenta);
+                Console.WriteLine(" ");
+			}
+            
+            bool destinoValido = false, destinoExiste= false;
+            int numCuentaDestino;
+            do
+	        {
+                Console.WriteLine("---------------------------------------");
+                Console.WriteLine(" ");
+                Console.WriteLine("Ingrese el número de cuenta de destino");
+                string destinoTxt = Console.ReadLine().Trim();
+                destinoValido = int.TryParse(destinoTxt, out numCuentaDestino);
+                for (int i = 0; i < cuentas.Count(); i++)
+	            {
+                    if(cuentas[i].Num_cuenta == numCuentaDestino){
+                        destinoExiste = true;
+                        //cuentaDestino = i;
+                    }
+	            }
+	        } while (!destinoValido && !destinoExiste);
+
+            for (int i = 0; i < cuentas.Count(); i++)
+			{
+                for (int j = 0; j < cuentas.Count(); j++)
+			    {
+                    if (cuentas[i].Num_cuenta == numCuentaRemitente && cuentas[j].Num_cuenta == numCuentaDestino)
+	                {
+                        if(monto > cuentas[i].Saldo){
+                            int diferencia = (monto - cuentas[i].Saldo);
+                            if(diferencia > cuentas[i].Credito){
+                                Console.WriteLine("El monto a transferir no puede superar su saldo y línea de crédito. Ingrese un monto menor");
+                            }else{
+                                cuentas[i].Credito = cuentas[i].Credito - diferencia;
+                                cuentas[i].Saldo = 0;
+                                cuentas[j].Saldo = cuentas[j].Saldo + monto;
+                            }
+                        }else{
+                            cuentas[i].Saldo = cuentas[i].Saldo - monto;
+                            cuentas[j].Saldo = cuentas[j].Saldo + monto;
+                        }     
+                    }   
                 }
 			}
         }

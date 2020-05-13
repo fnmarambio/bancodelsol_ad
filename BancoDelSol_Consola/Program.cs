@@ -76,6 +76,7 @@ namespace BancoDelSol_Consola
             Console.WriteLine("2. Mostrar Ejecutivos");
             Console.WriteLine("3. Crear Cliente");
             Console.WriteLine("4. Crear Cuenta");
+            Console.WriteLine("5. Depositar");
             Console.WriteLine("0. Menú Principal");
             Console.WriteLine("---------------------------------------");
             string opcion = Console.ReadLine().Trim();
@@ -97,6 +98,10 @@ namespace BancoDelSol_Consola
 
                 case "4":
                     IngresarCuenta();
+                    break;
+
+                case "5":
+                    depositar();
                     break;
 
                 case "0":
@@ -298,15 +303,14 @@ namespace BancoDelSol_Consola
                 saldoValido = int.TryParse(depTxt, out dep);
             } while (!saldoValido);
 
+            Console.WriteLine("---------------------------------------");
+            Console.WriteLine("Lista de los clientes");
 
             List<Cliente> clientes = clienteDAL.Mostrar();
             for (int i = 0; i < clientes.Count(); i++)
-            {
-                Console.WriteLine("---------------------------------------");
-                Console.WriteLine("Lista de los clientes");
+            {  
                 Console.WriteLine(" ");
-                Console.WriteLine("Run: " + clientes[i].Run + ". Sr.(a)" + clientes[i].Nombre + " " + clientes[i].Paterno+ " "+clientes[i].Materno);
-                Console.WriteLine("---------------------------------------");
+                Console.WriteLine("Run: " + clientes[i].Run + ". Sr.(a)" + clientes[i].Nombre + " " + clientes[i].Paterno+ " "+clientes[i].Materno);   
             }
 
             Console.WriteLine("Ingrese el rut del cliente a asociar a esta cuenta");
@@ -316,12 +320,64 @@ namespace BancoDelSol_Consola
             for (int i = 0; i < clientes.Count(); i++)
 			{
                 if(run == clientes[i].Run){
-                    Cuenta cuenta = new Cuenta(numCuenta, clientes[i], 1234, dep);
+                    Cuenta cuenta = new Cuenta();
                     cuenta.Num_cuenta = numCuenta;
                     cuenta.Saldo = dep;
-                    Console.WriteLine(numCuenta + " " + dep + " " + " " + cuenta.Num_cuenta + " " + cuenta.Saldo);
+                    cuenta.Cuentahabiente = clientes[i];
                     clientes[i].Cuentas.Add(cuenta);
                     cuentaDAL.Ingresar(cuenta);
+                }
+			}
+        }
+
+        //DEPOSITAR
+        public static void depositar(){
+
+            Console.WriteLine("---------------------------------------");
+            Console.WriteLine("Depositar");
+            Console.WriteLine("---------------------------------------");
+            Console.WriteLine(" ");
+
+            Console.WriteLine("Cuentas");
+            Console.WriteLine("---------------------------------------");
+            List<Cuenta> cuentas = cuentaDAL.Mostrar();
+            for (int i = 0; i < cuentas.Count(); i++)
+			{
+                Console.WriteLine("Titular: " + cuentas[i].Cuentahabiente.Nombre + " " + cuentas[i].Cuentahabiente.Paterno + " -- Nro cuenta: " + cuentas[i].Num_cuenta);
+                Console.WriteLine(" ");
+			}
+            
+
+            bool cuentaValida, cuentaExiste = false;
+            int numCuenta;
+            do
+	        {
+                Console.WriteLine("Ingrese el número de cuenta");
+                string numCuentaTxt = Console.ReadLine().Trim();
+                cuentaValida = int.TryParse(numCuentaTxt, out numCuenta);
+                foreach  (Cuenta c in cuentas)
+	            {
+                    if(c.Num_cuenta == numCuenta){
+                        cuentaExiste = true;
+                    }
+	            }
+	        } while (!cuentaValida && !cuentaExiste);
+
+            bool montoValido = false;
+            int monto;
+            do
+	        {
+                Console.WriteLine("Ingrese el monto del depósito");
+                string montoTxt = Console.ReadLine().Trim();
+                montoValido = int.TryParse(montoTxt, out monto);
+	        } while (!montoValido);
+            
+            for (int i = 0; i < cuentas.Count(); i++)
+			{
+                if(cuentas[i].Num_cuenta == numCuenta){
+                    Console.WriteLine(cuentas[i].Saldo);
+                    cuentas[i].Saldo = cuentas[i].Saldo + monto;
+                    Console.WriteLine(cuentas[i].Saldo);
                 }
 			}
         }

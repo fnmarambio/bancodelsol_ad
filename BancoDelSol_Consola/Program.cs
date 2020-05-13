@@ -52,7 +52,7 @@ namespace BancoDelSol_Consola
                     break;
 
                 case "4":
-                    mostrarCLiente();
+                    mostrarCliente();
                     break;
 
                 case "0": 
@@ -73,8 +73,9 @@ namespace BancoDelSol_Consola
             Console.WriteLine(" ");
             Console.WriteLine("---------------------------------------");
             Console.WriteLine("1. Crear Ejecutivo");
-            Console.WriteLine("2. Crear Cliente");
-            Console.WriteLine("3. Crear Cuenta");
+            Console.WriteLine("2. Mostrar Ejecutivos");
+            Console.WriteLine("3. Crear Cliente");
+            Console.WriteLine("4. Crear Cuenta");
             Console.WriteLine("0. Menú Principal");
             Console.WriteLine("---------------------------------------");
             string opcion = Console.ReadLine().Trim();
@@ -87,10 +88,14 @@ namespace BancoDelSol_Consola
                     break;
 
                 case "2":
-                    ingresarCliente();
+                    mostrarEjecutivo();
                     break;
 
                 case "3":
+                    ingresarCliente();
+                    break;
+
+                case "4":
                     IngresarCuenta();
                     break;
 
@@ -167,7 +172,7 @@ namespace BancoDelSol_Consola
         {
             Console.WriteLine(" ");
             Console.WriteLine("---------------------------------------");
-            Console.WriteLine("1. Crear Cliente");
+            Console.WriteLine("1. Mostrar Clientes");
             Console.WriteLine("2. Asociar Cuenta a Cliente");
             Console.WriteLine("0. Menú Principal");
             Console.WriteLine("---------------------------------------");
@@ -177,7 +182,7 @@ namespace BancoDelSol_Consola
             {
 
                 case "1":
-                    ingresarCliente();
+                    mostrarCliente();
                     break;
 
                 case "2":
@@ -245,7 +250,7 @@ namespace BancoDelSol_Consola
             clienteDAL.Ingresar(cliente);
         }
 
-        public static void mostrarCLiente(){
+        public static void mostrarCliente(){
             List<Cliente> clientes = clienteDAL.Mostrar();
             Console.WriteLine(" ");
             Console.WriteLine("---------------------------------------");
@@ -255,7 +260,14 @@ namespace BancoDelSol_Consola
             }else{
                 foreach (Cliente c in clientes){
                     Console.WriteLine(" ");
-                    Console.WriteLine(c.Nombre);
+                    Console.WriteLine("Sr.(a) "+ c.Nombre + " " + c.Paterno);
+                    if(c.Cuentas.Count()<1){
+                        Console.WriteLine("No tiene cuentas");
+                    }else{
+                        foreach(Cuenta cuenta in c.Cuentas){
+                            Console.WriteLine("Cuenta nro: " + cuenta.Num_cuenta + " -- Saldo: $"+ cuenta.Saldo);
+                        }
+                    }
                 }
             }
             Console.WriteLine("---------------------------------------");
@@ -265,22 +277,27 @@ namespace BancoDelSol_Consola
         public static void IngresarCuenta()
         {
             Console.WriteLine("---------------------------------------");
-            Console.WriteLine("Ingresar Cuenta");
+            Console.WriteLine("Crear Cuenta");
             Console.WriteLine("---------------------------------------");
 
-            bool claveValido = false;
-            Int16 clave;
+            bool numValido = false;
+            int numCuenta;
             do
             {
-                Console.WriteLine("Ingrese una clave para la Cuenta (Solo numeros):");
-                string telfTxt = Console.ReadLine().Trim();
-                claveValido = Int16.TryParse(telfTxt, out clave);
-            } while (!claveValido);
+                Console.WriteLine("Ingrese número de cuenta");
+                string numTxt = Console.ReadLine().Trim();
+                numValido = int.TryParse(numTxt, out numCuenta);
+            } while (!numValido);
 
-            
-            Cuenta cuenta = new Cuenta(clave);
 
-            Console.WriteLine("Asociar Cuenta:");
+            bool saldoValido = false;
+            int dep;
+            do{
+                Console.WriteLine("Ingrese el monto del primer depósito de la cuenta");
+                string depTxt = Console.ReadLine().Trim();
+                saldoValido = int.TryParse(depTxt, out dep);
+            } while (!saldoValido);
+
 
             List<Cliente> clientes = clienteDAL.Mostrar();
             for (int i = 0; i < clientes.Count(); i++)
@@ -288,21 +305,25 @@ namespace BancoDelSol_Consola
                 Console.WriteLine("---------------------------------------");
                 Console.WriteLine("Lista de los clientes");
                 Console.WriteLine(" ");
-                Console.WriteLine(i + " -. Cliente. " + clientes[i].Nombre + " " + clientes[i].Paterno+ " "+clientes[i].Materno);
+                Console.WriteLine("Run: " + clientes[i].Run + ". Sr.(a)" + clientes[i].Nombre + " " + clientes[i].Paterno+ " "+clientes[i].Materno);
                 Console.WriteLine("---------------------------------------");
             }
 
-            bool indiceValido = false;
-            Int16 indice;
-            do
-            {
-                Console.WriteLine("Seleccione el índice del cliente que estara asociado a esta cuenta:");
-                string indicetxt = Console.ReadLine().Trim();
-                indiceValido = Int16.TryParse(indicetxt, out indice);
-                clientes[indice].Cuentas.Add(cuenta);
-            } while (!indiceValido && indice < clientes.Count());
-            cuentaDAL.Ingresar(cuenta);
+            Console.WriteLine("Ingrese el rut del cliente a asociar a esta cuenta");
+            string run = Console.ReadLine().Trim();
 
+            //Asociar cuenta a cliente (chamullento)
+            for (int i = 0; i < clientes.Count(); i++)
+			{
+                if(run == clientes[i].Run){
+                    Cuenta cuenta = new Cuenta(numCuenta, clientes[i], 1234, dep);
+                    cuenta.Num_cuenta = numCuenta;
+                    cuenta.Saldo = dep;
+                    Console.WriteLine(numCuenta + " " + dep + " " + " " + cuenta.Num_cuenta + " " + cuenta.Saldo);
+                    clientes[i].Cuentas.Add(cuenta);
+                    cuentaDAL.Ingresar(cuenta);
+                }
+			}
         }
     }
 }

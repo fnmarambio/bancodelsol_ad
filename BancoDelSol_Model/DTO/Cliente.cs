@@ -10,7 +10,7 @@ namespace BancoDelSol_Model.DTO
     {
         //Atibutos
         private int cod_cliente;
-        private List<Cuenta> cuentas;
+        private List<Cuenta> cuentas = new List<Cuenta>();
         private Ejecutivo ejecutivo;
 
         public Cliente(string run, string nombre, string paterno, string materno, Int16 telefono, string direccion)

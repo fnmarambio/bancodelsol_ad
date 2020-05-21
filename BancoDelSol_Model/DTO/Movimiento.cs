@@ -24,6 +24,6 @@ namespace BancoDelSol_Model.DTO
         public int Num_movimiento { get => num_movimiento; set => num_movimiento = value; }
         public string Tipo { get => tipo; set => tipo = value; }
         public int Monto { get => monto; set => monto = value; }
-        internal Cuenta Cuenta_asoc { get => cuenta_asoc; set => cuenta_asoc = value; }
+        public Cuenta Cuenta_asoc { get => cuenta_asoc; set => cuenta_asoc = value; }
     }
 }

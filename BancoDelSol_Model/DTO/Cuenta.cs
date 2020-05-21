@@ -26,7 +26,7 @@ namespace BancoDelSol_Model.DTO
         public int Clave { get => clave; set => clave = value; }
         public int Saldo { get => saldo; set => saldo = value; }
         public Cliente Cuentahabiente { get => cuentahabiente; set => cuentahabiente = value; }
-        internal List<Movimiento> Movimientos { get => movimientos; set => movimientos = value; }
+        public List<Movimiento> Movimientos { get => movimientos; set => movimientos = value; }
 
         /*public override string ToString()
         {

@@ -17,8 +17,47 @@ namespace BancoDelSol_Consola
 
         static void Main(string[] args)
         {
-            while (Menu());
+            //while (Menu());
+            while (inicioSesion());
+        }
 
+        private static bool inicioSesion(){
+            bool continuar = true;
+            Console.WriteLine("---------------------------------------");
+            Console.WriteLine("Inicio Sesión");
+            Console.WriteLine("         Usuario: 0 y contraseña: 0 para salir");
+            Console.WriteLine("---------------------------------------");
+            Console.WriteLine("Ingrese usuario");
+            string usuario = Console.ReadLine().Trim();
+            Console.WriteLine(" ");
+            Console.WriteLine("Ingrese contraseña");
+            string clave = Console.ReadLine().Trim();
+
+            if (usuario.Equals("0") && clave.Equals("0"))
+	        {
+                continuar = false;
+	        }
+
+            if (usuario.Equals("administrador") && clave.Equals("administrador"))
+	        {
+                while(menuAdministrador());
+	        }else
+	        {
+                if (usuario.Equals("ejecutivo") && clave.Equals("ejecutivo"))
+	            {
+                    while(menuEjecutivo());
+	            }else{
+                    if (usuario.Equals("cliente") && clave.Equals("cliente"))
+	                {
+                        while(menuCliente());
+	                }else
+	                {
+                        Console.WriteLine("No se encuentra usuario");
+	                }
+                }
+	        }
+
+            return continuar;
         }
 
         //********************     MENU    *************************
@@ -64,13 +103,14 @@ namespace BancoDelSol_Consola
 
         //**********************   MENU ADMINISTRADOR  *********************************  
 
-        private static void menuAdministrador(){
+        private static bool menuAdministrador(){
 
+            bool continuar = true;
             Console.WriteLine(" ");
             Console.WriteLine("---------------------------------------");
             Console.WriteLine("1. Crear Ejecutivo");
             Console.WriteLine("2. Mostrar Ejecutivos");
-            Console.WriteLine("0. Menú Principal");
+            Console.WriteLine("0. Ir a inicio sesión");
             Console.WriteLine("---------------------------------------");
             string opcion = Console.ReadLine().Trim();
 
@@ -86,7 +126,7 @@ namespace BancoDelSol_Consola
                     break;
 
                 case "0":
-                    Menu();
+                    continuar = false;
                     break;
 
                 default:
@@ -95,19 +135,22 @@ namespace BancoDelSol_Consola
                     Console.ReadKey();
                     break;
             }
+
+            return continuar;
         }
 
         //***************************          MENU EJECUTIVO          *************************************
 
-        private static void menuEjecutivo()
+        private static bool menuEjecutivo()
         {
+            bool continuar = true;
             Console.WriteLine(" ");
             Console.WriteLine("---------------------------------------");
             Console.WriteLine("1. Crear Cliente");
             Console.WriteLine("2. Mostrar Cliente");
             Console.WriteLine("3. Crear Cuenta");
             Console.WriteLine("4. Depositar");
-            Console.WriteLine("0. Menú Principal");
+            Console.WriteLine("0. Ir a inicio sesión");
             Console.WriteLine("---------------------------------------");
             string opcion = Console.ReadLine().Trim();
 
@@ -130,7 +173,7 @@ namespace BancoDelSol_Consola
                     break;
 
                 case "0":
-                    Menu();
+                    continuar = false;
                     break;
 
                 default:
@@ -140,6 +183,7 @@ namespace BancoDelSol_Consola
                     break;
             }
 
+            return continuar;
         }
 
         //**************************       CREAR EJECUTIVO     ***************************
@@ -202,12 +246,14 @@ namespace BancoDelSol_Consola
         }
 
         //******************     MENU CLIENTE   ***********************
-        private static void menuCliente()
+        private static bool menuCliente()
         {
+            bool continuar = true;
             Console.WriteLine(" ");
             Console.WriteLine("---------------------------------------");
             Console.WriteLine("1. Transferir");
-            Console.WriteLine("0. Menú Principal");
+            Console.WriteLine("2. Consultar movimientos");
+            Console.WriteLine("0. Ir a inicio sesión");
             Console.WriteLine("---------------------------------------");
             string opcion = Console.ReadLine().Trim();
 
@@ -218,8 +264,12 @@ namespace BancoDelSol_Consola
                     transferir();
                     break;
 
+                case "2":
+                    mostrarMovimientos();
+                    break;
+
                 case "0":
-                    Menu();
+                    continuar = false;;
                     break;
 
                 default:
@@ -229,6 +279,7 @@ namespace BancoDelSol_Consola
                     break;
             }
             
+            return continuar;
         }
 
         // ***************************           CREAR CLIENTE             ******************************
@@ -355,6 +406,11 @@ namespace BancoDelSol_Consola
                     cuenta.Saldo = dep;
                     cuenta.Cuentahabiente = clientes[i];
                     cuenta.Clave = 1111;
+                    if (dep != 0)
+	                {
+                        Movimiento m = new Movimiento((cuenta.Movimientos.Count()+100), cuenta, "Depósito", dep);
+                        cuenta.Movimientos.Add(m);
+	                }
                     clientes[i].Cuentas.Add(cuenta);
                     cuentaDAL.Ingresar(cuenta);
                 }
@@ -408,6 +464,8 @@ namespace BancoDelSol_Consola
 			{
                 if(cuentas[i].Num_cuenta == numCuenta){
                     cuentas[i].Saldo = cuentas[i].Saldo + monto;
+                    Movimiento m = new Movimiento((cuentas[i].Movimientos.Count+100), cuentas[i], "Depósito", monto);
+                    cuentas[i].Movimientos.Add(m);
                 }
 			}
         }
@@ -511,14 +569,70 @@ namespace BancoDelSol_Consola
                                 cuentas[i].Credito = cuentas[i].Credito - diferencia;
                                 cuentas[i].Saldo = 0;
                                 cuentas[j].Saldo = cuentas[j].Saldo + monto;
+                                Movimiento movRemi = new Movimiento((cuentas[i].Movimientos.Count()+100), cuentas[i], "Transferencia", monto);
+                                Movimiento movDest = new Movimiento((cuentas[j].Movimientos.Count()+100), cuentas[j], "Transferencia", monto);
+                                cuentas[i].Movimientos.Add(movRemi);
+                                cuentas[j].Movimientos.Add(movDest);
                             }
                         }else{
                             cuentas[i].Saldo = cuentas[i].Saldo - monto;
                             cuentas[j].Saldo = cuentas[j].Saldo + monto;
+                            Movimiento movRemi = new Movimiento((cuentas[i].Movimientos.Count()+100), cuentas[i], "Transferencia", monto);
+                            Movimiento movDest = new Movimiento((cuentas[j].Movimientos.Count()+100), cuentas[j], "Transferencia", monto);
+                            cuentas[i].Movimientos.Add(movRemi);
+                            cuentas[j].Movimientos.Add(movDest);
                         }     
                     }   
                 }
 			}
+        }
+
+        //**********************           MOSTRAR MOVIMIENTOS           *************************
+
+        public static void mostrarMovimientos(){
+
+            Console.WriteLine("---------------------------------------");
+            Console.WriteLine("Cuentas");
+            Console.WriteLine("---------------------------------------");
+            List<Cuenta> cuentas = cuentaDAL.Mostrar();
+            for (int i = 0; i < cuentas.Count(); i++)
+			{
+                Console.WriteLine("Titular: " + cuentas[i].Cuentahabiente.Nombre + " " + cuentas[i].Cuentahabiente.Paterno + " -- Nro cuenta: " + cuentas[i].Num_cuenta);
+                Console.WriteLine(" ");
+			}
+
+            bool cuentaValido = false, cuentaExiste = false;
+            int numCuenta;// cuentaRemitente = 0, cuentaDestino = 0;
+            do
+	        {
+                Console.WriteLine("---------------------------------------");
+                Console.WriteLine(" ");
+                Console.WriteLine("Ingrese el número de cuenta a consultar");
+                string cuentaTxt = Console.ReadLine().Trim();
+                cuentaValido = int.TryParse(cuentaTxt, out numCuenta);
+                for (int i = 0; i < cuentas.Count(); i++)
+	            {
+                    if(cuentas[i].Num_cuenta == numCuenta){
+                        cuentaExiste = true;
+                        if (cuentas[i].Movimientos.Count() < 1)
+	                    {
+                            Console.WriteLine("No se registran movimientos asociados a esta cuenta");
+	                    }else{
+                            Console.WriteLine(" ");
+                            Console.WriteLine("Movimientos");
+                            Console.WriteLine("---------------------------------------");
+                            foreach  (Movimiento m in cuentas[i].Movimientos)
+	                        {
+                                Console.WriteLine("Tipo de movimiento: " + m.Tipo + " -- Monto: $" + m.Monto);
+	                        }
+                        }
+                    }
+	            }
+	        } while (!cuentaValido && !cuentaExiste);
+
+            
+
+            
         }
     }
 }

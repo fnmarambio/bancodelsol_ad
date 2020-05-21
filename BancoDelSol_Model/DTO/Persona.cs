@@ -13,12 +13,12 @@ namespace BancoDelSol_Model.DTO
         private string nombre;
         private string paterno;
         private string materno;
-        private Int16 telefono;
+        private int telefono;
         private string direccion;
 
 
         //Constructor con parametros
-        public Persona(string run, string nombre, string paterno, string materno, Int16 telefono, string direccion)
+        public Persona(string run, string nombre, string paterno, string materno, int telefono, string direccion)
         {
             this.run = run;
             this.nombre = nombre;
@@ -34,7 +34,7 @@ namespace BancoDelSol_Model.DTO
         public string Nombre { get => nombre; set => nombre = value; }
         public string Paterno { get => paterno; set => paterno = value; }
         public string Materno { get => materno; set => materno = value; }
-        public Int16 Telefono { get => telefono; set => telefono = value; }
+        public int Telefono { get => telefono; set => telefono = value; }
         public string Direccion { get => direccion; set => direccion = value; }
 
         //Metodos

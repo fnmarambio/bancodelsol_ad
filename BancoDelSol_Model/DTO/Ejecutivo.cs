@@ -12,7 +12,7 @@ namespace BancoDelSol_Model.DTO
         private int cod_ejecutivo;
         private List<Cliente> clientes = new List<Cliente>();
 
-        public Ejecutivo(string run, string nombre, string paterno, string materno, Int16 telefono, string direccion) 
+        public Ejecutivo(string run, string nombre, string paterno, string materno, int telefono, string direccion) 
             : base (run, nombre, paterno, materno, telefono, direccion)
         {
             //this.cod_ejecutivo = cod_ejecutivo;
@@ -21,9 +21,5 @@ namespace BancoDelSol_Model.DTO
         public int Cod_ejecutivo { get => cod_ejecutivo; set => cod_ejecutivo = value; }
         public List<Cliente> Clientes { get => clientes; set => clientes = value; }
 
-        /*public override string ToString()
-        {
-            return "Ejecutivo " + this.nombre + " " + this.paterno + " " + this.materno;
-        }*/
     }
 }

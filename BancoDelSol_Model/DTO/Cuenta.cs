@@ -12,7 +12,7 @@ namespace BancoDelSol_Model.DTO
         private int num_cuenta;
         private Cliente cuentahabiente;
         private int credito;
-        private int clave;
+        private string clave;
         private int saldo;
         private List<Movimiento> movimientos = new List<Movimiento>();
 
@@ -23,7 +23,7 @@ namespace BancoDelSol_Model.DTO
 
         public int Num_cuenta { get => num_cuenta; set => num_cuenta = value; }
         public int Credito { get => credito; set => credito = value; }
-        public int Clave { get => clave; set => clave = value; }
+        public string Clave { get => clave; set => clave = value; }
         public int Saldo { get => saldo; set => saldo = value; }
         public Cliente Cuentahabiente { get => cuentahabiente; set => cuentahabiente = value; }
         public List<Movimiento> Movimientos { get => movimientos; set => movimientos = value; }

@@ -17,6 +17,9 @@ namespace BancoDelSol_Consola
 
         static void Main(string[] args)
         {
+            Console.BackgroundColor = ConsoleColor.White;
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.Clear();
             while (inicioSesion());
         }
 
@@ -24,18 +27,15 @@ namespace BancoDelSol_Consola
             bool continuar = true;
             Console.WriteLine("---------------------------------------");
             Console.WriteLine("Inicio Sesión");
+            Console.ForegroundColor = ConsoleColor.DarkGray;
             Console.WriteLine("         Usuario: 0 y contraseña: 0 para salir");
+            Console.ForegroundColor = ConsoleColor.Black;
             Console.WriteLine("---------------------------------------");
             Console.WriteLine("Ingrese usuario");
             string usuario = Console.ReadLine().Trim();
             Console.WriteLine(" ");
             Console.WriteLine("Ingrese contraseña");
             string clave = Console.ReadLine().Trim();
-
-            if (usuario.Equals("0") && clave.Equals("0"))
-	        {
-                continuar = false;
-	        }
 
             if (usuario.Equals("administrador") && clave.Equals("administrador"))
 	        {
@@ -51,7 +51,13 @@ namespace BancoDelSol_Consola
                         while(menuCliente());
 	                }else
 	                {
-                        Console.WriteLine("No se encuentra usuario");
+                        if(usuario.Equals("0") && clave.Equals("0")){
+                            continuar = false;
+                        }else{
+                            Console.BackgroundColor = ConsoleColor.Yellow;
+                            Console.WriteLine("No se encuentra usuario");
+                            Console.BackgroundColor = ConsoleColor.White;
+                        }  
 	                }
                 }
 	        }
@@ -65,6 +71,10 @@ namespace BancoDelSol_Consola
 
             bool continuar = true;
             Console.WriteLine(" ");
+            Console.WriteLine("---------------------------------------");
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.WriteLine("         Menú Administrador");
+            Console.ForegroundColor = ConsoleColor.Black;
             Console.WriteLine("---------------------------------------");
             Console.WriteLine("1. Crear Ejecutivo");
             Console.WriteLine("2. Mostrar Ejecutivos");
@@ -88,7 +98,9 @@ namespace BancoDelSol_Consola
                     break;
 
                 default:
+                    Console.BackgroundColor = ConsoleColor.Yellow;
                     Console.WriteLine("Debe ingresar una opción válida");
+                    Console.BackgroundColor = ConsoleColor.White;
                     menuEjecutivo();
                     Console.ReadKey();
                     break;
@@ -102,7 +114,10 @@ namespace BancoDelSol_Consola
         private static bool menuEjecutivo()
         {
             bool continuar = true;
-            Console.WriteLine(" ");
+            Console.WriteLine("---------------------------------------");
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
+            Console.WriteLine("         Menú Ejecutivo");
+            Console.ForegroundColor = ConsoleColor.Black;
             Console.WriteLine("---------------------------------------");
             Console.WriteLine("1. Crear Cliente");
             Console.WriteLine("2. Mostrar Cliente");
@@ -135,7 +150,9 @@ namespace BancoDelSol_Consola
                     break;
 
                 default:
+                    Console.BackgroundColor = ConsoleColor.Yellow;
                     Console.WriteLine("Debe ingresar una opción válida");
+                    Console.BackgroundColor = ConsoleColor.White;
                     menuEjecutivo();
                     Console.ReadKey();
                     break;
@@ -147,11 +164,34 @@ namespace BancoDelSol_Consola
         //**************************       CREAR EJECUTIVO     ***************************
 
         private static void ingresarEjecutivo(){
+            Console.WriteLine("");
             Console.WriteLine("---------------------------------------");
-            Console.WriteLine("Ingresar Ejecutivo");
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.WriteLine("         Ingresar Ejecutivo");
+            Console.ForegroundColor = ConsoleColor.Black;
             Console.WriteLine("---------------------------------------");
-            Console.WriteLine("Ingrese run");
-            string run = Console.ReadLine().Trim();
+
+            bool runValido = false;
+            string run;
+            do
+	        {
+                Console.WriteLine("Ingrese run");
+                run = Console.ReadLine().Trim();
+                runValido = validarRut(run);
+                List<Ejecutivo> ejecutivos = ejecutivoDAL.Mostrar();
+                if(ejecutivos.Count() != 0){
+                    foreach (Ejecutivo e in ejecutivos)
+	                {
+                        if(e.Run == run){
+                            Console.BackgroundColor = ConsoleColor.Yellow;
+                            Console.WriteLine("Ya existe un ejecutivo registrado con este run");
+                            Console.BackgroundColor = ConsoleColor.White;
+                            runValido = false;
+                        }
+	                }
+                }
+	        } while (!runValido);
+            
             Console.WriteLine("Ingrese el nombre del ejecutivo");
             string nombre = Console.ReadLine().Trim();
             Console.WriteLine("Ingrese el apellido paterno del ejecutivo");
@@ -176,7 +216,6 @@ namespace BancoDelSol_Consola
             Ejecutivo ejecutivo = new Ejecutivo(run, nombre, paterno, materno, telefono, direccion);
 
             ejecutivoDAL.Ingresar(ejecutivo);
-            Console.WriteLine("---------------------------------------");
         }
 
         //**************************        MOSTRAR EJECUTIVOS        ***************************
@@ -185,16 +224,23 @@ namespace BancoDelSol_Consola
             List<Ejecutivo> ejecutivos = ejecutivoDAL.Mostrar();
             Console.WriteLine(" ");
             Console.WriteLine("---------------------------------------");
-            Console.WriteLine("Mostrar Ejecutivos");
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.WriteLine("         Mostrar Ejecutivos");
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.WriteLine("---------------------------------------");
             if(ejecutivos.Count()<1){
+                Console.BackgroundColor = ConsoleColor.Yellow;
                 Console.WriteLine("No se registran ejecutivos");
+                Console.BackgroundColor = ConsoleColor.White;
             }else{
                 foreach (Ejecutivo e in ejecutivos){
                     Console.WriteLine(" ");
                     Console.WriteLine("---------------------------------------");
                     Console.WriteLine("Ejtvo. " + e.Nombre + " " + e.Paterno);
                     if(e.Clientes.Count()<1){
+                        Console.BackgroundColor = ConsoleColor.Yellow;
                         Console.WriteLine("     No existen clientes asociados a este ejecutivo");
+                        Console.BackgroundColor = ConsoleColor.White;
                     }else{
                         foreach(Cliente c in e.Clientes){
                         Console.WriteLine("     Sr.(a) " + c.Nombre + " " + c.Paterno);
@@ -202,7 +248,6 @@ namespace BancoDelSol_Consola
                     }   
                 }
             }
-            Console.WriteLine("---------------------------------------");
         }
 
         //******************     MENU CLIENTE   ***********************
@@ -211,8 +256,13 @@ namespace BancoDelSol_Consola
             bool continuar = true;
             Console.WriteLine(" ");
             Console.WriteLine("---------------------------------------");
+            Console.ForegroundColor = ConsoleColor.DarkMagenta;
+            Console.WriteLine("         Menú Cliente");
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.WriteLine("---------------------------------------");
             Console.WriteLine("1. Transferir");
             Console.WriteLine("2. Consultar movimientos");
+            Console.WriteLine("3. Consultar saldo");
             Console.WriteLine("0. Ir a inicio sesión");
             Console.WriteLine("---------------------------------------");
             string opcion = Console.ReadLine().Trim();
@@ -228,12 +278,18 @@ namespace BancoDelSol_Consola
                     mostrarMovimientos();
                     break;
 
+                case "3":
+                    consultarSaldo();
+                    break;
+
                 case "0":
                     continuar = false;;
                     break;
 
                 default:
+                    Console.BackgroundColor = ConsoleColor.Yellow;
                     Console.WriteLine("Debe ingresar una opción válida");
+                    Console.BackgroundColor = ConsoleColor.White;
                     menuCliente();
                     Console.ReadKey();
                     break;
@@ -245,11 +301,34 @@ namespace BancoDelSol_Consola
         // ***************************           CREAR CLIENTE             ******************************
 
         public static void ingresarCliente(){
+            Console.WriteLine(" ");
             Console.WriteLine("---------------------------------------");
-            Console.WriteLine("Ingresar Cliente");
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
+            Console.WriteLine("         Ingresar Cliente");
+            Console.ForegroundColor = ConsoleColor.Black;
             Console.WriteLine("---------------------------------------");
-            Console.WriteLine("Ingrese run");
-            string run = Console.ReadLine().Trim();
+
+            bool runValido = false;
+            string run;
+            do
+	        {
+                List<Cliente> clientes = clienteDAL.Mostrar();
+                Console.WriteLine("Ingrese run");
+                run = Console.ReadLine().Trim();
+                runValido = validarRut(run);
+                if(clientes.Count() != 0){
+                    foreach (Cliente c in clientes)
+	                {
+                        if(c.Run == run){
+                            Console.BackgroundColor = ConsoleColor.Yellow;
+                            Console.WriteLine("Ya existe un cliente registrado con este run");
+                            Console.BackgroundColor = ConsoleColor.White;
+                            runValido = false;
+                        }
+	                }
+                }
+	        } while (!runValido);
+
             Console.WriteLine("Ingrese el nombre del cliente");
             string nombre = Console.ReadLine().Trim();
             Console.WriteLine("Ingrese el apellido paterno del cliente");
@@ -273,14 +352,13 @@ namespace BancoDelSol_Consola
             
             Cliente cliente = new Cliente(run, nombre, paterno, materno, telefono, direccion);
 
-            Console.WriteLine("---------------------------------------");
             Console.WriteLine(" ");
 
             List<Ejecutivo> ejecutivos = ejecutivoDAL.Mostrar();
             for (int i = 0; i < ejecutivos.Count(); i++)
 			{
                 Console.WriteLine("---------------------------------------");
-                Console.WriteLine("Ejecutivos");
+                Console.WriteLine("         Ejecutivos");
                 Console.WriteLine(" ");
                 Console.WriteLine(i + " -. Ejtvo. " + ejecutivos[i].Nombre + " " + ejecutivos[i].Paterno);
                 Console.WriteLine("---------------------------------------");
@@ -311,10 +389,14 @@ namespace BancoDelSol_Consola
             List<Cliente> clientes = clienteDAL.Mostrar();
             Console.WriteLine(" ");
             Console.WriteLine("---------------------------------------");
-            Console.WriteLine("Mostrar Clientes");
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
+            Console.WriteLine("         Mostrar Clientes");
+            Console.ForegroundColor = ConsoleColor.Black;
             Console.WriteLine("---------------------------------------");
             if(clientes.Count()<1){
+                Console.BackgroundColor = ConsoleColor.Yellow;
                 Console.WriteLine("No se registran clientes");
+                Console.BackgroundColor = ConsoleColor.White;
             }else{
                 foreach (Cliente c in clientes){
                     Console.WriteLine(" ");
@@ -328,96 +410,123 @@ namespace BancoDelSol_Consola
                     }
                 }
             }
-            Console.WriteLine("---------------------------------------");
         }
 
         //*******************************            CREAR CUENTA            *****************************
 
         public static void IngresarCuenta()
         {
-            Console.WriteLine("---------------------------------------");
-            Console.WriteLine("Crear Cuenta");
-            Console.WriteLine("---------------------------------------");
-
-            bool numValido = false, cuentaExiste = false;
-            int numCuenta;
-            do
-            {
-                Console.WriteLine("Ingrese número de cuenta");
-                string numTxt = Console.ReadLine().Trim();
-                numValido = int.TryParse(numTxt, out numCuenta);
-
-                List<Cuenta> cuentas = cuentaDAL.Mostrar();
-                foreach (Cuenta c in cuentas)
-	            {
-                    if (c.Num_cuenta == numCuenta)
-	                {
-                        cuentaExiste = true;
-                        Console.WriteLine("Ya existe una cuenta asociada a este número");
-	                }
-	            }
-
-                if(numCuenta <= 999){
-                    numValido = false;
-                }
-            } while (!numValido && !cuentaExiste);
-
-
-            bool saldoValido = false;
-            int dep;
-            do{
-                Console.WriteLine("Ingrese el monto del primer depósito de la cuenta");
-                string depTxt = Console.ReadLine().Trim();
-                saldoValido = int.TryParse(depTxt, out dep);
-                if(dep < 0){
-                    saldoValido = false;
-                    Console.WriteLine("El monto no puede ser negativo");
-                }
-            } while (!saldoValido);
-
-            Console.WriteLine("---------------------------------------");
-            Console.WriteLine("Lista de los clientes");
-            Console.WriteLine("---------------------------------------");
-
             List<Cliente> clientes = clienteDAL.Mostrar();
-            for (int i = 0; i < clientes.Count(); i++)
-            {  
-                Console.WriteLine("Run: " + clientes[i].Run + ". Sr.(a) " + clientes[i].Nombre + " " + clientes[i].Paterno+ " "+clientes[i].Materno);   
-            }
 
-            bool runExiste = false;
-            do
+            if (clientes.Count() < 1)
 	        {
-                Console.WriteLine(" ");
-                Console.WriteLine("Ingrese el rut del cliente a asociar a esta cuenta");
-                string run = Console.ReadLine().Trim();
-                for (int i = 0; i < clientes.Count(); i++)
-			    {
-                    if(run == clientes[i].Run){
-                        runExiste = true;
-                        Cuenta cuenta = new Cuenta();
-                        cuenta.Num_cuenta = numCuenta;
-                        cuenta.Saldo = dep;
-                        cuenta.Cuentahabiente = clientes[i];
-                        cuenta.Clave = 1111;
-                        if (dep != 0)
+                Console.BackgroundColor = ConsoleColor.Red;
+                Console.WriteLine("No se pueden crear cuentas porque no existen clientes");
+                Console.BackgroundColor = ConsoleColor.White;
+	        }else{
+                Console.WriteLine("---------------------------------------");
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
+                Console.WriteLine("         Crear Cuenta");
+                Console.ForegroundColor = ConsoleColor.Black;
+                Console.WriteLine("---------------------------------------");
+
+                bool numValido = false;
+                int numCuenta;
+                do
+                {
+                    bool cuentaExiste = false;
+                    Console.WriteLine("Ingrese número de cuenta");
+                    string numTxt = Console.ReadLine().Trim();
+                    numValido = int.TryParse(numTxt, out numCuenta);
+
+                    List<Cuenta> cuentas = cuentaDAL.Mostrar();
+                    foreach (Cuenta c in cuentas)
+	                {
+                        if (c.Num_cuenta == numCuenta)
 	                    {
-                            Movimiento m = new Movimiento((cuenta.Movimientos.Count()+100), cuenta, "Depósito", dep);
-                            cuenta.Movimientos.Add(m);
+                            cuentaExiste = true;
+                            Console.BackgroundColor = ConsoleColor.Yellow;
+                            Console.WriteLine("Ya existe una cuenta asociada a este número");
+                            Console.BackgroundColor = ConsoleColor.White;
 	                    }
-                        clientes[i].Cuentas.Add(cuenta);
-                        cuentaDAL.Ingresar(cuenta);
+	                }
+
+                    if(numTxt.Count() < 6 || cuentaExiste){
+                        numValido = false;
                     }
-			    }
-	        } while (!runExiste);
+                } while (!numValido);
+
+
+                bool saldoValido = false;
+                int dep;
+                do{
+                    Console.WriteLine("Ingrese el monto del primer depósito de la cuenta");
+                    string depTxt = Console.ReadLine().Trim();
+                    saldoValido = int.TryParse(depTxt, out dep);
+                    if(dep < 0){
+                        saldoValido = false;
+                        Console.BackgroundColor = ConsoleColor.Red;
+                        Console.WriteLine("El monto no puede ser negativo");
+                        Console.BackgroundColor = ConsoleColor.White;
+                    }
+                } while (!saldoValido);
+
+                Console.WriteLine(" ");
+                Console.WriteLine("---------------------------------------");
+                Console.WriteLine("         Lista de los clientes");
+                Console.WriteLine("---------------------------------------");
+
+                for (int i = 0; i < clientes.Count(); i++)
+                {  
+                    Console.WriteLine("     Run: " + clientes[i].Run + ". Sr.(a) " + clientes[i].Nombre + " " + clientes[i].Paterno+ " "+clientes[i].Materno);   
+                }
+
+                bool runExiste = false;
+                do
+	            {
+                    bool runValido = false;
+                    string run;
+                    do
+	                {
+                        Console.WriteLine(" ");
+                        Console.WriteLine("Ingrese el rut del cliente a asociar a esta cuenta");
+                        run = Console.ReadLine().Trim();
+                        runValido = validarRut(run);
+	                } while (!runValido);
+                
+                    for (int i = 0; i < clientes.Count(); i++)
+			        {
+                        if(run == clientes[i].Run){
+                            runExiste = true;
+                            string clave = clientes[i].Run.Substring(0,4);
+                            Cuenta cuenta = new Cuenta();
+                            cuenta.Num_cuenta = numCuenta;
+                            cuenta.Saldo = dep;
+                            cuenta.Cuentahabiente = clientes[i];
+                            cuenta.Clave = clave;
+                            if (dep != 0)
+	                        {
+                                Movimiento m = new Movimiento((cuenta.Movimientos.Count()+100), cuenta, "Depósito", dep);
+                                cuenta.Movimientos.Add(m);
+	                        }
+                            clientes[i].Cuentas.Add(cuenta);
+                            cuentaDAL.Ingresar(cuenta);
+                        }
+			        }
+	            } while (!runExiste);
+            }
+            
         }
 
         //************************        DEPOSITAR         *******************************
 
         public static void depositar(){
 
+            Console.WriteLine(" ");
             Console.WriteLine("---------------------------------------");
-            Console.WriteLine("Depositar");
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
+            Console.WriteLine("         Depositar");
+            Console.ForegroundColor = ConsoleColor.Black;
             Console.WriteLine("---------------------------------------");
             Console.WriteLine(" ");
 
@@ -425,14 +534,16 @@ namespace BancoDelSol_Consola
 
             if (cuentas.Count() == 0)
 	        {
-                Console.WriteLine("No existen cuentas");
+                Console.BackgroundColor = ConsoleColor.Red;
+                Console.WriteLine("No se pueden realizar depósitos porque no existen cuentas");
+                Console.BackgroundColor = ConsoleColor.White;
 	        }else{
-                Console.WriteLine("Cuentas");
+                Console.WriteLine("         Cuentas");
                 Console.WriteLine("---------------------------------------");
             
                 for (int i = 0; i < cuentas.Count(); i++)
 		    	{
-                    Console.WriteLine("Titular: " + cuentas[i].Cuentahabiente.Nombre + " " + cuentas[i].Cuentahabiente.Paterno + " -- Nro cuenta: " + cuentas[i].Num_cuenta);
+                    Console.WriteLine("     Titular: " + cuentas[i].Cuentahabiente.Nombre + " " + cuentas[i].Cuentahabiente.Paterno + " -- Nro cuenta: " + cuentas[i].Num_cuenta);
                     Console.WriteLine(" ");
 		    	}
 
@@ -452,7 +563,9 @@ namespace BancoDelSol_Consola
                    if(!cuentaExiste){          
                         cuentaValida = false;
                         Console.WriteLine(" ");
+                        Console.BackgroundColor = ConsoleColor.Yellow;
                         Console.WriteLine("No existe cuenta asociada a este número");
+                        Console.BackgroundColor = ConsoleColor.White;
                    }
 	            }while (!cuentaValida);
 
@@ -466,7 +579,9 @@ namespace BancoDelSol_Consola
 
                     if(monto < 0){
                         montoValido = false;
+                        Console.BackgroundColor = ConsoleColor.Red;
                         Console.WriteLine("El monto no puede ser negativo");
+                        Console.BackgroundColor = ConsoleColor.White;
                     }
 	            }while (!montoValido);
             
@@ -476,6 +591,9 @@ namespace BancoDelSol_Consola
                         cuentas[i].Saldo = cuentas[i].Saldo + monto;
                         Movimiento m = new Movimiento((cuentas[i].Movimientos.Count+100), cuentas[i], "Depósito", monto);
                         cuentas[i].Movimientos.Add(m);
+                        Console.BackgroundColor = ConsoleColor.Green;
+                        Console.WriteLine("Se ha depositado a la cuenta de " + cuentas[i].Cuentahabiente.Nombre + " " + cuentas[i].Cuentahabiente.Paterno + " exitosamente");
+                        Console.BackgroundColor = ConsoleColor.White;
                     }
 			    }
             }
@@ -486,22 +604,27 @@ namespace BancoDelSol_Consola
         public static void transferir(){
 
             List<Cuenta> cuentas = cuentaDAL.Mostrar();
+            Console.WriteLine(" ");
             Console.WriteLine("---------------------------------------");
-            Console.WriteLine("Transferir");
+            Console.ForegroundColor = ConsoleColor.DarkMagenta;
+            Console.WriteLine("         Transferir");
+            Console.ForegroundColor =ConsoleColor.Black;
             Console.WriteLine("---------------------------------------");
 
             if (cuentas.Count() == 0 || cuentas.Count() == 1)
 	        {
+                Console.BackgroundColor = ConsoleColor.Red;
                 Console.WriteLine("No existen cuentas suficientes para realizar transferencias");
+                Console.BackgroundColor = ConsoleColor.White;
 	        }else{
 
                 Console.WriteLine(" ");
-                Console.WriteLine("Cuenta remitente");
+                Console.WriteLine("         Cuenta remitente");
                 Console.WriteLine(" ");
             
                 for (int i = 0; i < cuentas.Count(); i++)
 			    {
-                    Console.WriteLine("Titular: " + cuentas[i].Cuentahabiente.Nombre + " " + cuentas[i].Cuentahabiente.Paterno + " -- Nro cuenta: " + cuentas[i].Num_cuenta);
+                    Console.WriteLine("     Titular: " + cuentas[i].Cuentahabiente.Nombre + " " + cuentas[i].Cuentahabiente.Paterno + " -- Nro cuenta: " + cuentas[i].Num_cuenta);
                     Console.WriteLine(" ");
 			    }
 
@@ -522,7 +645,9 @@ namespace BancoDelSol_Consola
 	                }
                     if(!remitenteExiste){
                         remitenteValido = false;
+                        Console.BackgroundColor = ConsoleColor.Yellow;
                         Console.WriteLine("No existe cuenta asociada a este número");
+                        Console.BackgroundColor = ConsoleColor.White;
                     }
 	            } while (!remitenteValido);
 
@@ -535,16 +660,18 @@ namespace BancoDelSol_Consola
                     montoValido = int.TryParse(montoTxt, out monto);
                     if(monto < 0){
                         montoValido = false;
+                        Console.BackgroundColor = ConsoleColor.Red;
+                        Console.WriteLine("El monto no puede ser negativo");
+                        Console.BackgroundColor = ConsoleColor.White;
                     }
 	            } while (!montoValido);
 
                 Console.WriteLine(" ");
-                Console.WriteLine("---------------------------------------");
-                Console.WriteLine("Cuenta destino");
+                Console.WriteLine("         Cuenta destino");
                 Console.WriteLine(" ");
                 for (int i = 0; i < cuentas.Count(); i++)
 			    {
-                    Console.WriteLine("Titular: " + cuentas[i].Cuentahabiente.Nombre + " " + cuentas[i].Cuentahabiente.Paterno + " -- Nro cuenta: " + cuentas[i].Num_cuenta);
+                    Console.WriteLine("     Titular: " + cuentas[i].Cuentahabiente.Nombre + " " + cuentas[i].Cuentahabiente.Paterno + " -- Nro cuenta: " + cuentas[i].Num_cuenta);
                     Console.WriteLine(" ");
 			    }
                 
@@ -564,20 +691,40 @@ namespace BancoDelSol_Consola
 	                }
                     if(!destinoExiste){
                         destinoValido = false;
+                        Console.BackgroundColor = ConsoleColor.Yellow;
                         Console.WriteLine("No existe cuenta asociada a este número");
+                        Console.BackgroundColor = ConsoleColor.White;
                     }
 	            } while (!destinoValido);
 
+
+                bool control = false;
                 for (int i = 0; i < cuentas.Count(); i++)
 			    {
                     for (int j = 0; j < cuentas.Count(); j++)
 			        {
-                        if (cuentas[i].Num_cuenta == numCuentaRemitente && cuentas[j].Num_cuenta == numCuentaDestino)
+                        if (cuentas[i].Num_cuenta == numCuentaRemitente && cuentas[j].Num_cuenta == numCuentaDestino && numCuentaRemitente != numCuentaDestino)
 	                    {
+                            bool claveValida = false;
+                            do
+	                        {
+                                Console.WriteLine("Ingrese clave de transferencia");
+                                string clave = Console.ReadLine().Trim();
+                                if(clave.Equals(cuentas[i].Clave)){
+                                    claveValida = true;
+                                }else{
+                                    Console.BackgroundColor = ConsoleColor.Yellow;
+                                    Console.WriteLine("Clave incorrecta. Ingrese nuevamente");
+                                    Console.BackgroundColor = ConsoleColor.White;
+                                }
+	                        } while (!claveValida);
+                            
                             if(monto > cuentas[i].Saldo){
                                 int diferencia = (monto - cuentas[i].Saldo);
                                 if(diferencia > cuentas[i].Credito){
+                                    Console.BackgroundColor = ConsoleColor.Red;
                                     Console.WriteLine("El monto a transferir no puede superar su saldo y línea de crédito. Ingrese un monto menor");
+                                    Console.BackgroundColor = ConsoleColor.White;
                                 }else{
                                     cuentas[i].Credito = cuentas[i].Credito - diferencia;
                                     cuentas[i].Saldo = 0;
@@ -586,6 +733,9 @@ namespace BancoDelSol_Consola
                                     Movimiento movDest = new Movimiento((cuentas[j].Movimientos.Count()+100), cuentas[j], "Transferencia", monto);
                                     cuentas[i].Movimientos.Add(movRemi);
                                     cuentas[j].Movimientos.Add(movDest);
+                                    Console.BackgroundColor = ConsoleColor.Green;
+                                    Console.WriteLine("Se ha realizado la transferencia a " + cuentas[j].Cuentahabiente.Nombre + " " + cuentas[j].Cuentahabiente.Paterno + " exitosamente");
+                                    Console.BackgroundColor = ConsoleColor.White;
                                 }
                             }else{
                                 cuentas[i].Saldo = cuentas[i].Saldo - monto;
@@ -594,13 +744,20 @@ namespace BancoDelSol_Consola
                                 Movimiento movDest = new Movimiento((cuentas[j].Movimientos.Count()+100), cuentas[j], "Transferencia", monto);
                                 cuentas[i].Movimientos.Add(movRemi);
                                 cuentas[j].Movimientos.Add(movDest);
+                                Console.BackgroundColor = ConsoleColor.Green;
+                                Console.WriteLine("Se ha realizado la transferencia a " + cuentas[j].Cuentahabiente.Nombre + " " + cuentas[j].Cuentahabiente.Paterno + " exitosamente");
+                                Console.BackgroundColor = ConsoleColor.White;
                             }     
                         }else
 	                    {
-                            if(numCuentaRemitente == numCuentaDestino){
+                            if(numCuentaRemitente == numCuentaDestino && !control){
+                                control = true;
+                                Console.BackgroundColor = ConsoleColor.Red;
                                 Console.WriteLine("No se puede transferir a la misma cuenta");
-                            } 
-	                    }   
+                                Console.BackgroundColor = ConsoleColor.White;    
+	                        }   
+                        }
+                            
                     }
 			    }
             }
@@ -610,14 +767,21 @@ namespace BancoDelSol_Consola
 
         public static void mostrarMovimientos(){
 
+            Console.WriteLine(" ");
             Console.WriteLine("---------------------------------------");
-            Console.WriteLine("Cuentas");
+            Console.ForegroundColor = ConsoleColor.DarkMagenta;
+            Console.WriteLine("         Mostrar movimientos de cuenta");
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.WriteLine("---------------------------------------");
+            Console.WriteLine(" ");
+            Console.ForegroundColor = ConsoleColor.DarkMagenta;
+            Console.WriteLine("         Cuentas");
+            Console.ForegroundColor = ConsoleColor.Black;
             Console.WriteLine("---------------------------------------");
             List<Cuenta> cuentas = cuentaDAL.Mostrar();
             for (int i = 0; i < cuentas.Count(); i++)
 			{
-                Console.WriteLine("Titular: " + cuentas[i].Cuentahabiente.Nombre + " " + cuentas[i].Cuentahabiente.Paterno + " -- Nro cuenta: " + cuentas[i].Num_cuenta);
-                Console.WriteLine(" ");
+                Console.WriteLine("     Titular: " + cuentas[i].Cuentahabiente.Nombre + " " + cuentas[i].Cuentahabiente.Paterno + " -- Nro cuenta: " + cuentas[i].Num_cuenta);
 			}
 
             bool cuentaValido = false, cuentaExiste = false;
@@ -635,23 +799,83 @@ namespace BancoDelSol_Consola
                         cuentaExiste = true;
                         if (cuentas[i].Movimientos.Count() == 0)
 	                    {
+                            Console.BackgroundColor = ConsoleColor.Yellow;
                             Console.WriteLine("No se registran movimientos asociados a esta cuenta");
+                            Console.BackgroundColor = ConsoleColor.White;
 	                    }else{
                             Console.WriteLine(" ");
-                            Console.WriteLine("Movimientos");
+                            Console.WriteLine("         Movimientos de la cuenta N°: " + numCuenta);
                             Console.WriteLine("---------------------------------------");
                             foreach  (Movimiento m in cuentas[i].Movimientos)
 	                        {
-                                Console.WriteLine("Tipo de movimiento: " + m.Tipo + " -- Monto: $" + m.Monto);
+                                Console.WriteLine("     Tipo de movimiento: " + m.Tipo + " -- Monto: $" + m.Monto);
 	                        }
                         }
                     }
 	            }
                 if(!cuentaExiste){
+                    Console.BackgroundColor = ConsoleColor.Red;
                     Console.WriteLine("No se encontró la cuenta. Ingrese nuevamente");
+                    Console.BackgroundColor = ConsoleColor.White;
                     cuentaValido = false;
                 }  
 	        } while (!cuentaValido);          
+        }
+
+        //*****************             VALIDAR RUT         ********************************
+
+        public static bool validarRut(string rut ) {
+            
+            bool validacion = false;
+            try {
+                rut =  rut.ToUpper();
+                //rut = rut.Replace(".", "");
+                rut = rut.Replace("-", "");
+                int rutAux = int.Parse(rut.Substring(0, rut.Length - 1));
+
+                char dv = char.Parse(rut.Substring(rut.Length - 1, 1));
+
+                int m = 0, s = 1;
+                for (; rutAux != 0; rutAux /= 10) {
+                    s = (s + rutAux % 10 * (9 - m++ % 6)) % 11;
+                }
+                if (dv == (char) (s != 0 ? s + 47 : 75)) {
+                    validacion = true;
+                }
+            } catch (Exception) {
+            }
+            return validacion;
+        }
+
+        //*************              CONSULTAR SALDO             *****************
+
+        public static void consultarSaldo(){
+            List<Cliente> clientes = clienteDAL.Mostrar();
+            Console.WriteLine(" ");
+            Console.WriteLine("---------------------------------------");
+            Console.ForegroundColor = ConsoleColor.DarkMagenta;
+            Console.WriteLine("         Consulta Saldo");
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.WriteLine("---------------------------------------");
+            if(clientes.Count()<1){
+                Console.BackgroundColor = ConsoleColor.Red;
+                Console.WriteLine("No se registran clientes");
+                Console.BackgroundColor = ConsoleColor.White;
+            }else{
+                foreach (Cliente c in clientes){
+                    Console.WriteLine(" ");
+                    Console.WriteLine("Sr.(a) "+ c.Nombre + " " + c.Paterno);
+                    if(c.Cuentas.Count()<1){
+                        Console.BackgroundColor = ConsoleColor.Yellow;
+                        Console.WriteLine("     No tiene cuentas");
+                        Console.BackgroundColor = ConsoleColor.White;
+                    }else{
+                        foreach(Cuenta cuenta in c.Cuentas){
+                            Console.WriteLine("     Cuenta nro: " + cuenta.Num_cuenta + " -- Saldo: $"+ cuenta.Saldo);
+                        }
+                    }
+                }
+            }
         }
     }
 }
